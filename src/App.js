@@ -193,6 +193,8 @@ function App() {
       help: '请介绍一下你的功能',
       example: '给我一个代码示例',
       explain: '请详细解释一下',
+      translate: '帮我翻译一下',
+      write: '帮我写一篇文章',
       clear: ''
     };
     
@@ -214,40 +216,27 @@ function App() {
       <div className="chat-header">
         <div>
           <h1>AI 智能对话助手</h1>
-          <small style={{opacity: 0.8, fontSize: '0.85rem'}}>
+          <small className="header-hint">
             按 Enter 发送，Shift + Enter 换行，Esc 清空输入
           </small>
         </div>
-        <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-          <span className="status">
+        <div className="header-actions">
+          <span className={`status ${isOnline ? 'online' : 'offline'}`}>
+            <span className="status-dot"></span>
             {isOnline ? '在线' : '离线'}
           </span>
-          <div style={{display: 'flex', gap: '8px'}}>
+          <div className="header-buttons">
             <button 
               onClick={() => handleQuickAction('help')}
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '0.8rem',
-                cursor: 'pointer'
-              }}
+              className="header-btn"
+              title="获取帮助"
             >
               帮助
             </button>
             <button 
               onClick={() => handleQuickAction('clear')}
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '0.8rem',
-                cursor: 'pointer'
-              }}
+              className="header-btn"
+              title="清空对话"
             >
               清空
             </button>
@@ -278,7 +267,7 @@ function App() {
                 <span></span>
                 <span></span>
               </div>
-              <span style={{marginLeft: '12px', color: '#666', fontSize: '0.9rem'}}>
+              <span className="thinking-text">
                 AI正在思考...
               </span>
             </div>
@@ -289,58 +278,81 @@ function App() {
       </div>
       
       <div className="input-container">
-        <div style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+        <div className="quick-actions">
           <button
             onClick={() => handleQuickAction('example')}
-            style={{
-              background: '#f7fafc',
-              border: '1px solid #e2e8f0',
-              color: '#4a5568',
-              padding: '4px 12px',
-              borderRadius: '16px',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
-            }}
+            className="quick-btn"
+            title="请求代码示例"
           >
-            🔧 代码示例
+            <span className="quick-icon">🔧</span>
+            <span>代码示例</span>
           </button>
           <button
             onClick={() => handleQuickAction('explain')}
-            style={{
-              background: '#f7fafc',
-              border: '1px solid #e2e8f0',
-              color: '#4a5568',
-              padding: '4px 12px',
-              borderRadius: '16px',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
-            }}
+            className="quick-btn"
+            title="请求详细解释"
           >
-            📚 详细解释
+            <span className="quick-icon">📚</span>
+            <span>详细解释</span>
+          </button>
+          <button
+            onClick={() => handleQuickAction('translate')}
+            className="quick-btn"
+            title="翻译服务"
+          >
+            <span className="quick-icon">🌐</span>
+            <span>翻译</span>
+          </button>
+          <button
+            onClick={() => handleQuickAction('write')}
+            className="quick-btn"
+            title="写作助手"
+          >
+            <span className="quick-icon">✍️</span>
+            <span>写作</span>
           </button>
         </div>
-        <div style={{display: 'flex', gap: '16px', alignItems: 'flex-end'}}>
-          <textarea
-            ref={textareaRef}
-            value={inputText}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder={isOnline ? "输入您的问题... (Enter发送，Shift+Enter换行)" : "网络连接已断开"}
-            disabled={isLoading || !isOnline}
-            rows={1}
-            style={{
-              minHeight: '56px',
-              maxHeight: '150px',
-              overflow: 'hidden'
-            }}
-          />
-          <button 
-            onClick={handleSend} 
-            disabled={!inputText.trim() || isLoading || !isOnline}
-            className="send-button"
-          >
-            {isLoading ? '发送中...' : '发送'}
-          </button>
+        
+        <div className="input-wrapper">
+          <div className="input-field">
+            <textarea
+              ref={textareaRef}
+              value={inputText}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder={isOnline ? "输入您的问题... (Enter发送，Shift+Enter换行)" : "网络连接已断开"}
+              disabled={isLoading || !isOnline}
+              rows={1}
+              className="message-input"
+            />
+            <div className="input-actions">
+              <button 
+                onClick={handleSend} 
+                disabled={!inputText.trim() || isLoading || !isOnline}
+                className="send-button"
+                title={isLoading ? '正在发送...' : '发送消息'}
+              >
+                {isLoading ? (
+                  <span className="loading-spinner"></span>
+                ) : (
+                  <svg className="send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="m22 2-7 20-4-9-9-4 20-7z"/>
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+          
+          <div className="input-footer">
+            <div className="char-count">
+              <span className={inputText.length > 1000 ? 'warning' : ''}>
+                {inputText.length}/2000
+              </span>
+            </div>
+            <div className="shortcuts-hint">
+              <kbd>⌘</kbd><kbd>Enter</kbd> 发送 • <kbd>Shift</kbd><kbd>Enter</kbd> 换行
+            </div>
+          </div>
         </div>
       </div>
     </div>
