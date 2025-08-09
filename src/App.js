@@ -20,10 +20,10 @@ function App() {
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-    
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
@@ -56,10 +56,10 @@ function App() {
   const sendMessage = async (userMessage) => {
     try {
       setIsLoading(true);
-      
+
       // 这里替换为你的Cloudflare Workers URL
       const WORKERS_URL = 'https://wild-sky-87bf.wangweizheng223.workers.dev/chat';
-      
+
       const response = await fetch(WORKERS_URL, {
         method: 'POST',
         headers: {
@@ -80,7 +80,7 @@ function App() {
       }
 
       const data = await response.json();
-      
+
       // 添加AI回复到消息列表
       const aiMessage = {
         id: Date.now() + Math.random(),
@@ -88,11 +88,11 @@ function App() {
         isUser: false,
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('发送消息错误:', error);
-      
+
       // 更详细的错误处理
       let errorText = '抱歉，连接服务器失败。';
       if (!isOnline) {
@@ -102,7 +102,7 @@ function App() {
       } else if (error.message.includes('HTTP')) {
         errorText = `服务器响应错误 (${error.message})，请稍后重试。`;
       }
-      
+
       const errorMessage = {
         id: Date.now() + Math.random(),
         text: errorText,
@@ -110,7 +110,7 @@ function App() {
         timestamp: new Date(),
         isError: true
       };
-      
+
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
@@ -150,7 +150,7 @@ function App() {
         handleSend();
       }
     }
-    
+
     // Escape 清空输入框
     if (e.key === 'Escape') {
       setInputText('');
@@ -167,15 +167,15 @@ function App() {
     const now = new Date();
     const messageDate = new Date(date);
     const diffInMinutes = Math.floor((now - messageDate) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) {
       return '刚刚';
     } else if (diffInMinutes < 60) {
       return `${diffInMinutes}分钟前`;
     } else if (messageDate.toDateString() === now.toDateString()) {
-      return messageDate.toLocaleTimeString('zh-CN', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
+      return messageDate.toLocaleTimeString('zh-CN', {
+        hour: '2-digit',
+        minute: '2-digit'
       });
     } else {
       return messageDate.toLocaleDateString('zh-CN', {
@@ -195,7 +195,7 @@ function App() {
       explain: '请详细解释一下',
       clear: ''
     };
-    
+
     if (action === 'clear') {
       setMessages([{
         id: Date.now(),
@@ -214,16 +214,16 @@ function App() {
       <div className="chat-header">
         <div>
           <h1>AI 智能对话助手</h1>
-          <small style={{opacity: 0.8, fontSize: '0.85rem'}}>
+          <small style={{ opacity: 0.8, fontSize: '0.85rem' }}>
             按 Enter 发送，Shift + Enter 换行，Esc 清空输入
           </small>
         </div>
-        <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span className="status">
             {isOnline ? '在线' : '离线'}
           </span>
-          <div style={{display: 'flex', gap: '8px'}}>
-            <button 
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
               onClick={() => handleQuickAction('help')}
               style={{
                 background: 'rgba(255,255,255,0.2)',
@@ -237,7 +237,7 @@ function App() {
             >
               帮助
             </button>
-            <button 
+            <button
               onClick={() => handleQuickAction('clear')}
               style={{
                 background: 'rgba(255,255,255,0.2)',
@@ -254,11 +254,11 @@ function App() {
           </div>
         </div>
       </div>
-      
+
       <div className="messages-container">
         {messages.map((message) => (
-          <div 
-            key={message.id} 
+          <div
+            key={message.id}
             className={`message ${message.isUser ? 'user-message' : 'ai-message'} ${message.isError ? 'error-message' : ''}`}
           >
             <div className="message-content">
@@ -269,7 +269,7 @@ function App() {
             </div>
           </div>
         ))}
-        
+
         {isLoading && (
           <div className="message ai-message loading-message">
             <div className="message-content">
@@ -278,18 +278,18 @@ function App() {
                 <span></span>
                 <span></span>
               </div>
-              <span style={{marginLeft: '12px', color: '#666', fontSize: '0.9rem'}}>
+              <span style={{ marginLeft: '12px', color: '#666', fontSize: '0.9rem' }}>
                 AI正在思考...
               </span>
             </div>
           </div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="input-container">
-        <div style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
           <button
             onClick={() => handleQuickAction('example')}
             style={{
@@ -319,7 +319,7 @@ function App() {
             📚 详细解释
           </button>
         </div>
-        <div style={{display: 'flex', gap: '16px', alignItems: 'flex-end'}}>
+        <div style={{ display: 'flex', flex: 1, gap: '16px', alignItems: 'flex-end' }}>
           <textarea
             ref={textareaRef}
             value={inputText}
@@ -334,8 +334,8 @@ function App() {
               overflow: 'hidden'
             }}
           />
-          <button 
-            onClick={handleSend} 
+          <button
+            onClick={handleSend}
             disabled={!inputText.trim() || isLoading || !isOnline}
             className="send-button"
           >
