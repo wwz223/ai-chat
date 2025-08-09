@@ -66,12 +66,7 @@ function App() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: userMessage,
-          // 传递更多上下文信息用于PC端更复杂的对话
-          history: messages.slice(-10), // PC端可以处理更多历史消息
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          platform: 'web'
+          prompt: userMessage,
         })
       });
 
