@@ -79,7 +79,7 @@ function App() {
       // 添加AI回复到消息列表
       const aiMessage = {
         id: Date.now() + Math.random(),
-        text: data.response || '抱歉，我现在无法回答您的问题。',
+        text: data.generated_text || '抱歉，我现在无法回答您的问题。',
         isUser: false,
         timestamp: new Date()
       };
