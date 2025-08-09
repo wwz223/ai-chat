@@ -131,6 +131,7 @@ function App() {
     setMessages(prev => [...prev, userMessage]);
     sendMessage(inputText.trim());
     setInputText('');
+    // eslint-disable-next-line
   }, [inputText, isLoading]);
 
   // 处理键盘事件 - PC端优化
