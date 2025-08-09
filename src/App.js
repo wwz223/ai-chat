@@ -58,7 +58,7 @@ function App() {
       setIsLoading(true);
 
       // 这里替换为你的Cloudflare Workers URL
-      const WORKERS_URL = 'https://wild-sky-87bf.wangweizheng223.workers.dev/chat';
+      const WORKERS_URL = 'https://wild-sky-87bf.wangweizheng223.workers.dev';
 
       const response = await fetch(WORKERS_URL, {
         method: 'POST',
