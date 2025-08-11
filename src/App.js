@@ -207,46 +207,20 @@ function App() {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <div>
-          <h1>AI 智能对话助手</h1>
-          <small style={{ opacity: 0.8, fontSize: '0.85rem' }}>
-            按 Enter 发送，Shift + Enter 换行，Esc 清空输入
-          </small>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span className="status">
+        <h1>AI 助手</h1>
+        <div className="header-actions">
+          <span className={`status ${isOnline ? 'online' : 'offline'}`}>
             {isOnline ? '在线' : '离线'}
           </span>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button
-              onClick={() => handleQuickAction('help')}
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '0.8rem',
-                cursor: 'pointer'
-              }}
-            >
-              帮助
-            </button>
-            <button
-              onClick={() => handleQuickAction('clear')}
-              style={{
-                background: 'rgba(255,255,255,0.2)',
-                border: 'none',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '0.8rem',
-                cursor: 'pointer'
-              }}
-            >
-              清空
-            </button>
-          </div>
+          <button
+            onClick={() => handleQuickAction('clear')}
+            className="clear-button"
+            title="清空对话"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 6h18m-2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -284,57 +258,32 @@ function App() {
       </div>
 
       <div className="input-container">
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-          <button
-            onClick={() => handleQuickAction('example')}
-            style={{
-              background: '#f7fafc',
-              border: '1px solid #e2e8f0',
-              color: '#4a5568',
-              padding: '4px 12px',
-              borderRadius: '16px',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
-            }}
-          >
-            🔧 代码示例
-          </button>
-          <button
-            onClick={() => handleQuickAction('explain')}
-            style={{
-              background: '#f7fafc',
-              border: '1px solid #e2e8f0',
-              color: '#4a5568',
-              padding: '4px 12px',
-              borderRadius: '16px',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
-            }}
-          >
-            📚 详细解释
-          </button>
-        </div>
-        <div style={{ display: 'flex', flex: 1, gap: '16px', alignItems: 'flex-end' }}>
+        <div className="input-wrapper">
           <textarea
             ref={textareaRef}
             value={inputText}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder={isOnline ? "输入您的问题... (Enter发送，Shift+Enter换行)" : "网络连接已断开"}
+            placeholder={isOnline ? "输入消息..." : "网络连接已断开"}
             disabled={isLoading || !isOnline}
             rows={1}
-            style={{
-              minHeight: '56px',
-              maxHeight: '150px',
-              overflow: 'hidden'
-            }}
+            className="message-input"
           />
           <button
             onClick={handleSend}
             disabled={!inputText.trim() || isLoading || !isOnline}
             className="send-button"
+            title="发送消息"
           >
-            {isLoading ? '发送中...' : '发送'}
+            {isLoading ? (
+              <svg className="loading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 12a9 9 0 11-6.219-8.56"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 2l-7 20-4-9-9-4z"/>
+              </svg>
+            )}
           </button>
         </div>
       </div>
