@@ -207,9 +207,26 @@ function App() {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <h1>AI 助手</h1>
+        <div className="header-title">
+          <div className="logo-icon">
+            <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+              <rect x="8" y="10" width="16" height="12" rx="6" fill="currentColor"/>
+              <circle cx="12" cy="15" r="1.5" fill="white"/>
+              <circle cx="20" cy="15" r="1.5" fill="white"/>
+              <circle cx="12" cy="15" r="0.7" fill="currentColor"/>
+              <circle cx="20" cy="15" r="0.7" fill="currentColor"/>
+              <path d="M14 18 Q16 19 18 18" stroke="white" strokeWidth="1" strokeLinecap="round" fill="none"/>
+              <rect x="15" y="6" width="2" height="4" fill="currentColor"/>
+              <circle cx="16" cy="6" r="1" fill="#ef4444"/>
+            </svg>
+          </div>
+          <h1>AI 助手</h1>
+        </div>
         <div className="header-actions">
           <span className={`status ${isOnline ? 'online' : 'offline'}`}>
+            <svg width="8" height="8" viewBox="0 0 8 8" className="status-dot">
+              <circle cx="4" cy="4" r="3" fill="currentColor"/>
+            </svg>
             {isOnline ? '在线' : '离线'}
           </span>
           <button
@@ -230,11 +247,38 @@ function App() {
             key={message.id}
             className={`message ${message.isUser ? 'user-message' : 'ai-message'} ${message.isError ? 'error-message' : ''}`}
           >
+            <div className="message-header">
+              <div className="message-avatar">
+                {message.isUser ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                ) : message.isError ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                    <rect x="8" y="10" width="16" height="12" rx="6" fill="currentColor"/>
+                    <circle cx="12" cy="15" r="1.5" fill="white"/>
+                    <circle cx="20" cy="15" r="1.5" fill="white"/>
+                    <circle cx="12" cy="15" r="0.7" fill="currentColor"/>
+                    <circle cx="20" cy="15" r="0.7" fill="currentColor"/>
+                    <path d="M14 18 Q16 19 18 18" stroke="white" strokeWidth="1" strokeLinecap="round" fill="none"/>
+                    <rect x="15" y="6" width="2" height="4" fill="currentColor"/>
+                    <circle cx="16" cy="6" r="1" fill="#ef4444"/>
+                  </svg>
+                )}
+              </div>
+              <div className="message-time">
+                {formatTime(message.timestamp)}
+              </div>
+            </div>
             <div className="message-content">
               {message.text}
-            </div>
-            <div className="message-time">
-              {formatTime(message.timestamp)}
             </div>
           </div>
         ))}
@@ -258,7 +302,28 @@ function App() {
       </div>
 
       <div className="input-container">
+        <div className="input-hint">
+          <div className="keyboard-shortcuts">
+            <span className="shortcut-item">
+              <kbd>Enter</kbd>
+              <span>发送</span>
+            </span>
+            <span className="shortcut-item">
+              <kbd>Shift</kbd> + <kbd>Enter</kbd>
+              <span>换行</span>
+            </span>
+            <span className="shortcut-item">
+              <kbd>Esc</kbd>
+              <span>清空</span>
+            </span>
+          </div>
+        </div>
         <div className="input-wrapper">
+          <div className="input-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
           <textarea
             ref={textareaRef}
             value={inputText}
